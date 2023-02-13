@@ -5,8 +5,11 @@ import ButtomTab from '../Buttom-Tab/ButtomTab.js';
 export default function DrawerScreen(Drawer) {
   return (
     <>
-      <Drawer.Screen name={'Home'} component={ButtomTab} />
-      <Drawer.Screen name={navString.Main} component={Main} />
+      <Drawer.Screen
+        name={'Home'}
+        component={ButtomTab}
+        options={{drawerLabel: 'All Todos'}}
+      />
     </>
   );
 }

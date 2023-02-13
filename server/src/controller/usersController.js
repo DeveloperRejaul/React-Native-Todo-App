@@ -4,7 +4,7 @@ const acssesUsers = async (req, res) => {
   try {
     const allUsers = await User.find()
       .select({ name: 1 })
-      .populate("todos", "title content ");
+      .populate("todos", "title content");
     res.status(200).send({ users: allUsers });
   } catch (error) {
     res.status(400).send({ message: "Error: Somthing Wrong" });
