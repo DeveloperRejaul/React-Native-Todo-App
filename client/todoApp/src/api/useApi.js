@@ -7,7 +7,7 @@ export default () => {
   const [status, setStatus] = useState(null);
 
   // get data
-  const getData = async url => {
+  const getData = async (url = '') => {
     setLoading(true);
     await fetch(url)
       .then(res => {
@@ -22,5 +22,72 @@ export default () => {
         setError(true);
       });
   };
-  return {getData, data, loading, error, status};
+
+  // Post data
+  const postData = async (url = '', data = {}) => {
+    setLoading(true);
+    await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(res => {
+        if (!res.ok) {
+          setLoading(false);
+          const message = `Error : ${res.status}`;
+          throw new Error(message);
+        } else {
+          setStatus(res.status);
+          setLoading(false);
+          return res.json();
+        }
+      })
+      .then(res => setdata(res.todo))
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
+  };
+
+  // PUT mathod
+  const putData = async (url = '', data = {}) => {
+    setLoading(true);
+    await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(res => {
+        if (!res.ok) {
+          setLoading(false);
+          const message = `Error : ${res.status}`;
+          throw new Error(message);
+        } else {
+          setStatus(res.status);
+          setLoading(false);
+          return res.json();
+        }
+      })
+      .catch(err => {
+        setError(err);
+        setLoading(false);
+      });
+  };
+
+  // Delete  mathod
+  const deleteData = async (url = '', data = {}) => {
+    setLoading(true);
+    await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify(data),
+    });
+  };
+  return {getData, postData, putData, deleteData, data, loading, error, status};
 };
