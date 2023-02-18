@@ -8,28 +8,32 @@ export default function CardDetels(props) {
   return (
     <>
       <HeaderCom text={'Detels Todo'} onPress={() => navigation.goBack()} />
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.users}>
-            <View style={styles.imageView}>
-              <Image
-                style={styles.imageStyle}
-                source={{uri: `${data.user.profilePic}`}}
-              />
+      <View style={styles.body}>
+        <ScrollView>
+          <View>
+            <View style={styles.users}>
+              <View style={styles.imageView}>
+                <Image
+                  style={styles.imageStyle}
+                  source={{uri: `${data.user.profilePic}`}}
+                />
+              </View>
+              <Text style={styles.username}>{data.user.name}</Text>
             </View>
-            <Text style={styles.username}>{data.user.name}</Text>
+            <Text style={styles.title}>{data.title}</Text>
+            <Text style={styles.content}>{data.content}</Text>
           </View>
-          <Text style={styles.title}>{data.title}</Text>
-          <Text style={styles.content}>{data.content}</Text>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  body: {
     paddingHorizontal: rw(2),
+    flex: 1,
+    backgroundColor: '#fff',
   },
   imageView: {
     height: rh(7),

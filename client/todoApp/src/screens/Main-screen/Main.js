@@ -1,4 +1,4 @@
-import {FlatList, RefreshControl} from 'react-native';
+import {FlatList, RefreshControl, StatusBar} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CardCom from '../../components/CardCom.jsx';
 import useApi from '../../api/useApi.js';
@@ -39,6 +39,7 @@ export default function Main({navigation}) {
         drawerHeader={true}
         onPress={() => navigation.openDrawer()}
       />
+      <StatusBar backgroundColor={'white'} barStyle={'light-content'} />
       {loading ? (
         <LoadingItemsCom />
       ) : (
