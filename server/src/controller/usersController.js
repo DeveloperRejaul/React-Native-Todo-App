@@ -11,6 +11,17 @@ const acssesUsers = async (req, res) => {
   }
 };
 
+const acssesUserById = async (req, res) => {
+  try {
+    const user = await User.findById({ _id: req.params.id })
+      .select({ name: 1 })
+      .populate("todos", "title content");
+    res.status(200).send({ user: user });
+  } catch (error) {
+    res.status(400).send({ message: "Error: Somthing Wrong" });
+  }
+};
+
 const createUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -27,9 +38,6 @@ const createUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  // const { userId, name, email, password } = req.body;
-  // console.log(userId, name, email, password);
-
   try {
     const { userId, name, email, password } = req.body;
 
@@ -66,4 +74,5 @@ module.exports = {
   createUser,
   updateUser,
   deletUser,
+  acssesUserById,
 };

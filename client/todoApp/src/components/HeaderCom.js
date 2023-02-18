@@ -1,15 +1,23 @@
-import {StyleSheet, Text, View, Pressable} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {rf} from '../constents/responsiveDimensions.js';
+import {rf, rh} from '../constents/responsiveDimensions.js';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 
-export default function HeaderCom({text, onPress}) {
+export default function HeaderCom({
+  text = '',
+  onPress = () => {},
+  drawerHeader = false,
+}) {
+  const DrawerIcon = <Icon name="menu" size={rf(4)} color="#000" />;
+  const BackIcon = <Icon name="arrow-back" size={rf(4)} color="#000" />;
+
   return (
     <View style={styles.header}>
-      <Pressable onPress={onPress}>
-        <Icon name="arrow-back" size={rf(4)} color="#000" />
-      </Pressable>
+      <TouchableOpacity onPress={onPress}>
+        {drawerHeader ? DrawerIcon : BackIcon}
+      </TouchableOpacity>
       <Text style={styles.text}>{text}</Text>
+      <Text></Text>
     </View>
   );
 }
@@ -17,6 +25,15 @@ export default function HeaderCom({text, onPress}) {
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: rh(5),
+    paddingHorizontal: rh(1),
+    backgroundColor: '#fff',
   },
-  text: {},
+  text: {
+    color: '#000',
+    fontWeight: '700',
+    fontSize: rf(2.8),
+  },
 });

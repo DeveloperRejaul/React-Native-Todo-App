@@ -6,7 +6,7 @@ const Drawer = createDrawerNavigator();
 export default function DrawerStack() {
   return (
     <Drawer.Navigator
-      screenOptions={{headerShown: true, headerTitle: 'All Todos'}}>
+      screenOptions={{headerShown: false, headerTitle: 'All Todos'}}>
       <>{DrawerScreen(Drawer)}</>
     </Drawer.Navigator>
   );

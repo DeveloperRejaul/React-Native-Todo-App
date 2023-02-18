@@ -20,7 +20,11 @@ export default function CardCom({ele}) {
       </View>
       <Pressable
         style={styles.cardBody}
-        onPress={() => nav.navigate(navString.CardDetels)}>
+        onPress={() =>
+          nav.navigate(navString.CardDetels, {
+            data: ele,
+          })
+        }>
         <View style={styles.content}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.items} ellipsizeMode="tail" numberOfLines={4}>
