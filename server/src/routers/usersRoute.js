@@ -1,3 +1,4 @@
+const config = require("../config/config.js");
 const {
   acssesUsers,
   createUser,

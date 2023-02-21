@@ -14,8 +14,8 @@ const createTodo = async (req, res) => {
   try {
     const { title, content, userId } = req.body;
     const todo = new Todo({
-      title,
-      content,
+      title: title,
+      content: content,
       user: userId,
     });
     const newTodo = await todo.save();
@@ -57,6 +57,16 @@ const updateTodo = async (req, res) => {
 const deleteTodo = async (req, res) => {
   try {
     const { todoId } = req.body;
+
+    // update user todos array
+    await User.findOneAndUpdate(
+      { todos: todoId },
+      {
+        $pull: { todos: todoId },
+      }
+    );
+
+    // delete todo
     const deletedTodo = await Todo.findByIdAndDelete({ _id: todoId });
     res.status(200).send({ message: "delete done", todo: deletedTodo });
   } catch (error) {

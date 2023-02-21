@@ -1,3 +1,5 @@
+const { cloudinary } = require("../config/config.js");
+const Todo = require("../models/todosModel.js");
 const User = require("../models/usersModel.js");
 
 const acssesUsers = async (req, res) => {
@@ -23,17 +25,20 @@ const acssesUserById = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
+  const file = req.files.image;
+  const result = await cloudinary.uploader.upload(file.tempFilePath, {
+    public_id: Date.now(),
+    resource_type: "auto",
+    folder: "images",
+  });
+
+  const { name, email, password } = req.body;
   try {
-    const { name, email, password } = req.body;
-    const newUser = new User({
-      name,
-      email,
-      password,
-    });
+    const newUser = new User({ name, email, password, image: result.url });
     await newUser.save();
-    res.status(200).send({ user: newUser });
+    await res.status(200).send({ user: newUser });
   } catch (error) {
-    res.status(400).send({ message: "Error: Somthing Wrong" });
+    await res.status(400).send({ message: "Error: Somthing Wrong" });
   }
 };
 
@@ -62,8 +67,10 @@ const updateUser = async (req, res) => {
 const deletUser = async (req, res) => {
   try {
     const { userId } = req.body;
+
+    await Todo.deleteMany({ user: userId });
     const deletedUser = await User.findByIdAndDelete({ _id: userId });
-    res.status(200).send({ message: "detet done", user: deletedUser });
+    res.status(200).send({ message: "detete done", user: deletedUser });
   } catch (error) {
     res.status(400).send({ message: "Error: Somthing Wrong" });
   }
