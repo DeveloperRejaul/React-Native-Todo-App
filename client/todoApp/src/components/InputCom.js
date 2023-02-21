@@ -9,12 +9,15 @@ export default function InputCom({
   onChangeText,
   placeholder,
   multiline,
+  inputStyle,
+  lableStyle,
+  containerStyle,
 }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.lable}>{lable} </Text>
+    <View style={[styles.container, containerStyle]}>
+      <Text style={[styles.lable, lableStyle]}>{lable} </Text>
       <TextInput
-        style={styles.TextInput}
+        style={[styles.TextInput, inputStyle]}
         maxLength={maxLength}
         value={value}
         onChangeText={onChangeText}
