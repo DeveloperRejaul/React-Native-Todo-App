@@ -1,16 +1,18 @@
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {rf, rh} from '../constents/responsiveDimensions.js';
-import {Spinner} from 'native-base';
+import {Spinner, View} from 'native-base';
 
 const ButtonCom = ({onPress, text, loading}) => {
   return (
     <TouchableOpacity onPress={onPress}>
-      {loading ? (
-        <Spinner color="cyan.500" />
-      ) : (
-        <Text style={styles.btn}>{text}</Text>
-      )}
+      <View style={styles.btn}>
+        {loading ? (
+          <Spinner color="#fff" />
+        ) : (
+          <Text style={styles.btnText}>{text}</Text>
+        )}
+      </View>
     </TouchableOpacity>
   );
 };
@@ -21,10 +23,12 @@ const styles = StyleSheet.create({
   btn: {
     backgroundColor: '#057dff',
     borderRadius: 10,
-    fontSize: rf(2.5),
-    textAlign: 'center',
     paddingVertical: rh(0.8),
+  },
+  btnText: {
+    fontSize: rf(2.5),
     fontWeight: '500',
     color: '#fff',
+    textAlign: 'center',
   },
 });

@@ -11,21 +11,62 @@ import LSInpute from '../../components/LSInpute.js';
 import ButtonCom from '../../components/ButtonCom.js';
 import navString from '../../constents/navString.js';
 import {rf, rh, rw} from '../../constents/responsiveDimensions.js';
+import userInformation from '../../constents/userInformation.js';
 export default function Singin({navigation}) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [comfirmPassword, setComfirmPassword] = useState('');
-  const [image, setImage] = useState({name: 'not select image', url: ''});
+  const [image, setImage] = useState({
+    name: 'not select image',
+    url: '',
+    type: '',
+  });
   const [passwordVesiblity, setpasswordVesiblity] = useState(true);
   const [conPasswordVesiblity, setConPasswordVesiblity] = useState(true);
+  const [Loading, setLoading] = useState(false);
+  const url = userInformation.url;
 
   const handelPicture = async () => {
     const result = await launchImageLibrary();
-    const {uri, fileName} = result.assets[0];
+    const {uri, fileName, type} = result.assets[0];
     setImage({
       name: fileName,
       url: uri,
+      type: type,
+    });
+  };
+
+  const handleSingin = async () => {
+    setLoading(true);
+    // Post From Data
+    const fromdata = new FormData();
+    fromdata.append('image', {
+      uri: image.url,
+      type: image.type,
+      name: image.name,
+    });
+    fromdata.append('data', {
+      string: JSON.stringify({
+        name: name,
+        email: email,
+        password: comfirmPassword,
+      }),
+      type: 'application/json',
+    });
+
+    await fetch(`${url}users/`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+      body: fromdata,
+    }).then(res => {
+      setLoading(false);
+      if (res.status == 200) {
+        navigation.navigate(navString.Login);
+      }
     });
   };
 
@@ -77,7 +118,7 @@ export default function Singin({navigation}) {
         </View>
       </>
 
-      <ButtonCom text={'Singin'} />
+      <ButtonCom text={'Singin'} onPress={handleSingin} loading={Loading} />
       <View style={[styles.row]}>
         <Text style={styles.reg}>You are not registered pleace goto</Text>
         <Text

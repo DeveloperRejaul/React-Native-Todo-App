@@ -20,6 +20,7 @@ export default function Profile({navigation}) {
   const url = `${userInformation.url}users/${userInformation.userId}`;
   const [userTodos, setuserTodos] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [user, setUser] = useState({image: '', name: ''});
 
   // fetch todos
   useEffect(() => {
@@ -29,6 +30,7 @@ export default function Profile({navigation}) {
   // set todos in state
   useEffect(() => {
     if (status === 200) {
+      setUser(data.user);
       setuserTodos([...data.user.todos]);
     }
   }, [data]);
@@ -57,12 +59,9 @@ export default function Profile({navigation}) {
         }>
         <View style={styles.profile}>
           <View style={[gStyles.imageView, styles.imageView]}>
-            <Image
-              style={gStyles.imageStyle}
-              source={require('../../asset/images/download.png')}
-            />
+            <Image style={gStyles.imageStyle} source={{uri: `${user.image}`}} />
           </View>
-          <Text style={styles.username}>User Neme</Text>
+          <Text style={styles.username}>{user.name}</Text>
         </View>
         {loading ? (
           <LoadingItemsCom />

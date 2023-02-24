@@ -5,11 +5,13 @@ const {
   updateUser,
   deletUser,
   acssesUserById,
+  loginUser,
 } = require("../controller/usersController.js");
 const router = require("express").Router();
 
 router.get("/:id", acssesUserById);
 router.get("/", acssesUsers);
+router.post("/login/", loginUser);
 router.post("/", createUser);
 router.put("/", updateUser);
 router.delete("/", deletUser);

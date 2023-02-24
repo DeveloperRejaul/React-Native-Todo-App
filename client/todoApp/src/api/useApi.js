@@ -39,12 +39,12 @@ export default () => {
           const message = `Error : ${res.status}`;
           throw new Error(message);
         } else {
-          setStatus(res.status);
           setLoading(false);
+          setStatus(res.status);
           return res.json();
         }
       })
-      .then(res => setdata(res.todo))
+      .then(res => setdata(res))
       .catch(err => {
         setError(err);
         setLoading(false);
@@ -89,5 +89,14 @@ export default () => {
       body: JSON.stringify(data),
     });
   };
-  return {getData, postData, putData, deleteData, data, loading, error, status};
+  return {
+    getData,
+    postData,
+    putData,
+    deleteData,
+    data,
+    loading,
+    error,
+    status,
+  };
 };

@@ -8,13 +8,15 @@ import {useNavigation} from '@react-navigation/native';
 export default function CardCom({ele}) {
   const nav = useNavigation();
   const {title, content, user} = ele;
-  const {name, profilePic} = user;
+  const {name, image} = user;
+
+  console.log(ele);
 
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
         <Pressable style={styles.ProfileImage}>
-          <Image style={styles.image} source={{uri: `${profilePic}`}} />
+          <Image style={styles.image} source={{uri: `${image}`}} />
         </Pressable>
         <Text style={styles.userName}>{name}</Text>
       </View>

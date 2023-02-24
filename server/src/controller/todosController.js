@@ -3,7 +3,7 @@ const User = require("../models/usersModel.js");
 
 const acssesTodos = async (req, res) => {
   try {
-    const allTodos = await Todo.find().populate("user", "name profilePic -_id");
+    const allTodos = await Todo.find().populate("user", "name image -_id");
     res.status(200).send({ Todos: allTodos });
   } catch (error) {
     res.status(400).send({ message: "Error: Somthing Wrong" });

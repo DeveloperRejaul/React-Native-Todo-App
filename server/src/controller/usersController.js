@@ -16,7 +16,7 @@ const acssesUsers = async (req, res) => {
 const acssesUserById = async (req, res) => {
   try {
     const user = await User.findById({ _id: req.params.id })
-      .select({ name: 1 })
+      .select({ name: 1, image: 1 })
       .populate("todos", "title content");
     res.status(200).send({ user: user });
   } catch (error) {
@@ -32,10 +32,14 @@ const createUser = async (req, res) => {
     folder: "images",
   });
 
-  const { name, email, password } = req.body;
+  const { name, email, password } = JSON.parse(req.body.data);
   try {
-    const newUser = new User({ name, email, password, image: result.url });
-    await newUser.save();
+    const newUser = await User.create({
+      name,
+      email,
+      password,
+      image: result.url,
+    });
     await res.status(200).send({ user: newUser });
   } catch (error) {
     await res.status(400).send({ message: "Error: Somthing Wrong" });
@@ -76,10 +80,26 @@ const deletUser = async (req, res) => {
   }
 };
 
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const findUser = await User.findOne({ email: email });
+    if (findUser.password === password) {
+      res.status(200).send({ user: findUser });
+    } else {
+      res.status(400).send({ message: "user not found" });
+    }
+  } catch (error) {
+    res.status(400).send({ message: "Error: Somthing Wrong" });
+  }
+};
+
 module.exports = {
   acssesUsers,
   createUser,
   updateUser,
   deletUser,
   acssesUserById,
+  loginUser,
 };

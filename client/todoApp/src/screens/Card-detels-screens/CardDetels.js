@@ -15,7 +15,7 @@ export default function CardDetels(props) {
               <View style={styles.imageView}>
                 <Image
                   style={styles.imageStyle}
-                  source={{uri: `${data.user.profilePic}`}}
+                  source={{uri: `${data.user.image}`}}
                 />
               </View>
               <Text style={styles.username}>{data.user.name}</Text>
