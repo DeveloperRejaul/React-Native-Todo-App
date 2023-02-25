@@ -10,8 +10,6 @@ export default function CardCom({ele}) {
   const {title, content, user} = ele;
   const {name, image} = user;
 
-  console.log(ele);
-
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
@@ -68,6 +66,15 @@ const styles = StyleSheet.create({
     padding: rw(2),
     borderRadius: rf(2),
     marginTop: rh(1),
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   userName: {
     color: '#000',

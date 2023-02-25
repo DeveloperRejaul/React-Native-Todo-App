@@ -20,7 +20,7 @@ export default function Profile({navigation}) {
   const url = `${userInformation.url}users/${userInformation.userId}`;
   const [userTodos, setuserTodos] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [user, setUser] = useState({image: '', name: ''});
+  const [user, setUser] = useState({image: null, name: null});
 
   // fetch todos
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function Profile({navigation}) {
   // set todos in state
   useEffect(() => {
     if (status === 200) {
-      setUser(data.user);
+      setUser({image: data.user.image, name: data.user.name});
       setuserTodos([...data.user.todos]);
     }
   }, [data]);
@@ -59,7 +59,11 @@ export default function Profile({navigation}) {
         }>
         <View style={styles.profile}>
           <View style={[gStyles.imageView, styles.imageView]}>
-            <Image style={gStyles.imageStyle} source={{uri: `${user.image}`}} />
+            <Image
+              style={gStyles.imageStyle}
+              source={{uri: `${user.image}`}}
+              defaultSource={require('../../asset/images/download.png')}
+            />
           </View>
           <Text style={styles.username}>{user.name}</Text>
         </View>
@@ -71,10 +75,13 @@ export default function Profile({navigation}) {
               <View style={[gStyles.row, styles.cardHeader]}>
                 <Text style={styles.title}>{ele.title}</Text>
                 <View style={[gStyles.row]}>
-                  <TouchableOpacity onPress={() => deleteTodo(ele._id)}>
-                    <Text style={styles.Detete}>Delete</Text>
+                  <TouchableOpacity
+                    style={styles.Btn}
+                    onPress={() => deleteTodo(ele._id)}>
+                    <Text style={styles.btntext}>Delete</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
+                    style={styles.Btn}
                     onPress={() =>
                       navigation.navigate(navString.CreateTodo, {
                         updateTitle: ele.title,
@@ -83,7 +90,7 @@ export default function Profile({navigation}) {
                         isUpdate: true,
                       })
                     }>
-                    <Text style={styles.editText}>Update</Text>
+                    <Text style={styles.btntext}>Update</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -124,11 +131,16 @@ const styles = StyleSheet.create({
   },
   content: {fontSize: rf(2.2), color: '#6B728E', fontWeight: '400'},
   cardHeader: {justifyContent: 'space-between', alignItems: 'center'},
-  editText: {color: '#6B728E', fontSize: rf(2.2), fontWeight: '400'},
-  Detete: {
-    color: '#6B728E',
+  btntext: {
+    color: '#fff',
     fontSize: rf(2.2),
-    fontWeight: '400',
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  Btn: {
+    backgroundColor: '#057dff',
     marginRight: rw(2),
+    paddingHorizontal: rw(2),
+    borderRadius: 5,
   },
 });

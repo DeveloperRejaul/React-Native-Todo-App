@@ -1,10 +1,12 @@
-import {FlatList, RefreshControl, StatusBar} from 'react-native';
+import {FlatList, RefreshControl, StatusBar, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CardCom from '../../components/CardCom.jsx';
 import useApi from '../../api/useApi.js';
 import HeaderCom from '../../components/HeaderCom.js';
 import LoadingItemsCom from '../../components/LoadingItemsCom.js';
 import userInformation from '../../constents/userInformation.js';
+import {View} from 'native-base';
+import {rw} from '../../constents/responsiveDimensions.js';
 
 export default function Main({navigation}) {
   const {data, getData, loading, status} = useApi();
@@ -33,7 +35,7 @@ export default function Main({navigation}) {
   }, []);
 
   return (
-    <>
+    <View style={styles.container}>
       <HeaderCom
         text="All Todos"
         drawerHeader={true}
@@ -52,6 +54,14 @@ export default function Main({navigation}) {
           keyExtractor={item => item._id}
         />
       )}
-    </>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingHorizontal: rw(4),
+  },
+});
