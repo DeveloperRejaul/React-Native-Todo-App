@@ -2,6 +2,7 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {rf, rh} from '../constents/responsiveDimensions.js';
 import {Spinner, View} from 'native-base';
+import fontName from '../constents/fontName.js';
 
 const ButtonCom = ({onPress, text, loading}) => {
   return (
@@ -27,8 +28,9 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontSize: rf(2.5),
-    fontWeight: '500',
+    fontWeight: '600',
     color: '#fff',
     textAlign: 'center',
+    fontFamily: fontName.poppinsMedium,
   },
 });

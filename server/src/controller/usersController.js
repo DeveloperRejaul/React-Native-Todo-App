@@ -1,6 +1,8 @@
 const { cloudinary } = require("../config/config.js");
 const Todo = require("../models/todosModel.js");
 const User = require("../models/usersModel.js");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 const acssesUsers = async (req, res) => {
   try {
@@ -34,13 +36,15 @@ const createUser = async (req, res) => {
 
   const { name, email, password } = JSON.parse(req.body.data);
   try {
-    const newUser = await User.create({
-      name,
-      email,
-      password,
-      image: result.url,
+    bcrypt.hash(password, saltRounds, async function (err, hash) {
+      const newUser = await User.create({
+        name,
+        email,
+        password: hash,
+        image: result.url,
+      });
+      await res.status(200).send({ user: newUser });
     });
-    await res.status(200).send({ user: newUser });
   } catch (error) {
     await res.status(400).send({ message: "Error: Somthing Wrong" });
   }
@@ -50,19 +54,21 @@ const updateUser = async (req, res) => {
   try {
     const { userId, name, email, password } = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(
-      { _id: userId },
-      {
-        $set: {
-          name,
-          email,
-          password,
+    bcrypt.hash(password, saltRounds, async function (err, hash) {
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: userId },
+        {
+          $set: {
+            name,
+            email,
+            password: hash,
+          },
         },
-      },
-      { new: true }
-    );
+        { new: true }
+      );
 
-    res.status(200).send({ message: "user updated", user: updatedUser });
+      res.status(200).send({ message: "user updated", user: updatedUser });
+    });
   } catch (error) {
     res.status(400).send({ message: "Error: Somthing Wrong" });
   }
@@ -85,11 +91,13 @@ const loginUser = async (req, res) => {
 
   try {
     const findUser = await User.findOne({ email: email });
-    if (findUser.password === password) {
-      res.status(200).send({ user: findUser });
-    } else {
-      res.status(400).send({ message: "user not found" });
-    }
+    bcrypt.hash(password, saltRounds, async function (err, hash) {
+      if (findUser.password === hash) {
+        res.status(200).send({ user: findUser });
+      } else {
+        res.status(400).send({ message: "user not found" });
+      }
+    });
   } catch (error) {
     res.status(400).send({ message: "Error: Somthing Wrong" });
   }

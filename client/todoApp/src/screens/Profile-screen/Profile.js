@@ -14,6 +14,7 @@ import useApi from '../../api/useApi.js';
 import userInformation from '../../constents/userInformation.js';
 import LoadingItemsCom from '../../components/LoadingItemsCom.js';
 import navString from '../../constents/navString.js';
+import fontName from '../../constents/fontName.js';
 
 export default function Profile({navigation}) {
   const {data, getData, status, loading, deleteData} = useApi();
@@ -59,11 +60,7 @@ export default function Profile({navigation}) {
         }>
         <View style={styles.profile}>
           <View style={[gStyles.imageView, styles.imageView]}>
-            <Image
-              style={gStyles.imageStyle}
-              source={{uri: `${user.image}`}}
-              defaultSource={require('../../asset/images/download.png')}
-            />
+            <Image style={gStyles.imageStyle} source={{uri: `${user.image}`}} />
           </View>
           <Text style={styles.username}>{user.name}</Text>
         </View>
@@ -116,6 +113,7 @@ const styles = StyleSheet.create({
     fontSize: rf(2.5),
     fontWeight: '800',
     color: '#000',
+    fontFamily: 'Poppins-Bold.ttf',
   },
   todoCard: {
     backgroundColor: '#ecf9ff',
@@ -126,16 +124,23 @@ const styles = StyleSheet.create({
   title: {
     fontSize: rf(2.5),
     color: '#000',
-    fontWeight: '600',
+    fontWeight: '800',
     paddingBottom: rh(0.3),
+    fontFamily: 'Poppins-Bold.ttf',
   },
-  content: {fontSize: rf(2.2), color: '#6B728E', fontWeight: '400'},
+  content: {
+    fontSize: rf(2.2),
+    color: '#6B728E',
+    fontWeight: '400',
+    fontFamily: fontName.poppinsMedium,
+  },
   cardHeader: {justifyContent: 'space-between', alignItems: 'center'},
   btntext: {
     color: '#fff',
     fontSize: rf(2.2),
     fontWeight: '500',
     textAlign: 'center',
+    fontFamily: fontName.poppinsRegular,
   },
   Btn: {
     backgroundColor: '#057dff',

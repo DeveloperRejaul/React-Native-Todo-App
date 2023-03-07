@@ -2,6 +2,7 @@ import navString from '../../constents/navString.js';
 import {CreateTodo, Main, Profile} from '../../screens/index.js';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import {rf} from '../../constents/responsiveDimensions.js';
+import {View} from 'react-native';
 
 export default function TabScreen(Tab) {
   // const Tab = createBottomTabNavigator();
@@ -31,11 +32,13 @@ export default function TabScreen(Tab) {
           tabBarLabel: 'Cteate',
           tabBarIcon: ({focused}) => {
             return (
-              <Icon
-                name="md-add-circle-outline"
-                size={rf(5)}
-                color={focused ? '#057dff' : '#6B728E'}
-              />
+              <View>
+                <Icon
+                  name="md-add-circle-outline"
+                  size={rf(3)}
+                  color={focused ? '#057dff' : '#6B728E'}
+                />
+              </View>
             );
           },
         }}
