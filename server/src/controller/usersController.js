@@ -1,7 +1,8 @@
-const { cloudinary } = require("../config/config.js");
 const Todo = require("../models/todosModel.js");
 const User = require("../models/usersModel.js");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const config = require("../config/config.js");
 const saltRounds = 10;
 
 const acssesUsers = async (req, res) => {
@@ -27,24 +28,22 @@ const acssesUserById = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-  const file = req.files.image;
-  const result = await cloudinary.uploader.upload(file.tempFilePath, {
-    public_id: Date.now(),
-    resource_type: "auto",
-    folder: "images",
-  });
+  const profilePicruteName = req.file.filename;
+  const { name, email, password } = req.body;
 
-  const { name, email, password } = JSON.parse(req.body.data);
   try {
-    bcrypt.hash(password, saltRounds, async function (err, hash) {
-      const newUser = await User.create({
-        name,
-        email,
-        password: hash,
-        image: result.url,
-      });
-      await res.status(200).send({ user: newUser });
+    const bcryptedPassword = await bcrypt.hash(password, saltRounds);
+    const profilePictureURL = `${req.protocol}://${req.get(
+      "host"
+    )}/${profilePicruteName}`;
+
+    const newUser = await User.create({
+      name,
+      email,
+      password: bcryptedPassword,
+      image: profilePictureURL,
     });
+    await res.status(200).send({ user: newUser });
   } catch (error) {
     await res.status(400).send({ message: "Error: Somthing Wrong" });
   }
@@ -54,21 +53,20 @@ const updateUser = async (req, res) => {
   try {
     const { userId, name, email, password } = req.body;
 
-    bcrypt.hash(password, saltRounds, async function (err, hash) {
-      const updatedUser = await User.findByIdAndUpdate(
-        { _id: userId },
-        {
-          $set: {
-            name,
-            email,
-            password: hash,
-          },
+    const bcryptedPass = await bcrypt.hash(password, saltRounds);
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id: userId },
+      {
+        $set: {
+          name,
+          email,
+          password: bcryptedPass,
         },
-        { new: true }
-      );
+      },
+      { new: true }
+    );
 
-      res.status(200).send({ message: "user updated", user: updatedUser });
-    });
+    res.status(200).send({ message: "user updated", user: updatedUser });
   } catch (error) {
     res.status(400).send({ message: "Error: Somthing Wrong" });
   }
@@ -86,20 +84,27 @@ const deletUser = async (req, res) => {
   }
 };
 
-const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-
+const loginUser = async (req, res, next) => {
   try {
+    const { email, password } = req.body;
     const findUser = await User.findOne({ email: email });
-    bcrypt.hash(password, saltRounds, async function (err, hash) {
-      if (findUser.password === hash) {
-        res.status(200).send({ user: findUser });
-      } else {
-        res.status(400).send({ message: "user not found" });
-      }
-    });
+    const isValidPass = await bcrypt.compare(password, findUser.password);
+    if (isValidPass) {
+      const token = jwt.sign(
+        {
+          name: findUser.name,
+          email: findUser.email,
+        },
+        config.JWT_TOKEN_SECRET,
+        { expiresIn: "15d" }
+      );
+      res.status(200).send({ token });
+    } else {
+      res.status(200).send({ message: "Authentication filled" });
+    }
   } catch (error) {
-    res.status(400).send({ message: "Error: Somthing Wrong" });
+    console.log(error.message);
+    res.status(200).send({ message: "Authentication filled" });
   }
 };
 
