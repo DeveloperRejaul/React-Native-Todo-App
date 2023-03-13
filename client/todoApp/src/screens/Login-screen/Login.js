@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {rf, rh, rw} from '../../constents/responsiveDimensions.js';
 import LSInpute from '../../components/LSInpute.js';
 import ButtonCom from '../../components/ButtonCom.js';
@@ -7,22 +7,26 @@ import navString from '../../constents/navString.js';
 import useApi from '../../api/useApi.js';
 import userInformation from '../../constents/userInformation.js';
 import {useDispatch} from 'react-redux';
-import {login} from '../../redux/futures/authSlice.js';
+import {login, setUserData} from '../../redux/futures/authSlice.js';
 
 export default function Login({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordVesiblity, setpasswordVesiblity] = useState(true);
-  const {postData, status, loading} = useApi();
+  const {postData, status, loading, data} = useApi();
 
   const dispatch = useDispatch();
 
   const handleLogin = async () => {
-    await postData(`${userInformation.url}users/login/`, {email, password});
-    if (status === 200) {
-      dispatch(login());
-    }
+    await postData(`${userInformation.url}users/login`, {email, password});
   };
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setUserData(data));
+      if (status === 200) dispatch(login());
+    }
+  }, [data, status]);
 
   return (
     <View style={styles.container}>

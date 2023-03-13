@@ -98,7 +98,7 @@ const loginUser = async (req, res, next) => {
         config.JWT_TOKEN_SECRET,
         { expiresIn: "15d" }
       );
-      res.status(200).send({ token });
+      res.status(200).send({ token: token, userid: findUser._id });
     } else {
       res.status(200).send({ message: "Authentication filled" });
     }

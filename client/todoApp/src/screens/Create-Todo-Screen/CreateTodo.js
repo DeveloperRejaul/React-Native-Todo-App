@@ -1,12 +1,13 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import InputCom from '../../components/InputCom.js';
-import {rh, rw} from '../../constents/responsiveDimensions.js';
+import {rf, rh, rw} from '../../constents/responsiveDimensions.js';
 import useApi from '../../api/useApi.js';
 import userInformation from '../../constents/userInformation.js';
 import ButtonCom from '../../components/ButtonCom.js';
 import ToastCom from '../../components/ToastCom.js';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 export default function CreateTodo({route, navigation}) {
   const [title, settitle] = useState('');
@@ -15,6 +16,7 @@ export default function CreateTodo({route, navigation}) {
   const [slideIsOpen, setSlideIsOpen] = useState(false);
   const [isUpdateTodo, setIsUpdateTodo] = useState(false);
   const [todoId, setTodoId] = useState('');
+  const userId = useSelector(state => state.auth.userId);
 
   // get all route params
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function CreateTodo({route, navigation}) {
     await postData(`${userInformation.url}todos/`, {
       title: title,
       content: content,
-      userId: userInformation.userId,
+      userId: userId,
     });
     setSlideIsOpen(true);
     settitle('');
@@ -66,17 +68,23 @@ export default function CreateTodo({route, navigation}) {
   return (
     <View style={styles.container}>
       <View>
-        <InputCom
+        <TextInput
           value={title}
           onChangeText={settitle}
           placeholder={'Todo Title'}
+          style={styles.title}
+          placeholderTextColor="#000"
         />
-        <InputCom
-          value={content}
-          onChangeText={setContent}
-          multiline={true}
-          placeholder="Write todo content"
-        />
+        <View style={styles.discription}>
+          <TextInput
+            value={content}
+            onChangeText={setContent}
+            multiline={true}
+            placeholder="Write todo content"
+            style={styles.discriptionInput}
+            placeholderTextColor="#000"
+          />
+        </View>
       </View>
       <ToastCom
         status={status}
@@ -86,7 +94,7 @@ export default function CreateTodo({route, navigation}) {
         }
       />
       <ButtonCom
-        text={isUpdateTodo ? 'Update' : 'Create'}
+        text={isUpdateTodo ? 'Update Todo' : 'Add Todo'}
         onPress={isUpdateTodo ? updatePost : createPost}
         loading={loading}
       />
@@ -102,5 +110,29 @@ const styles = StyleSheet.create({
     paddingTop: rh(2),
     justifyContent: 'space-between',
     paddingVertical: rh(1),
+  },
+  title: {
+    borderWidth: 2,
+    borderRadius: 5,
+    fontSize: rf(2.2),
+    fontWeight: '800',
+    paddingHorizontal: rw(5),
+    borderColor: '#2d224a',
+    backgroundColor: '#dbdbdba4',
+    color: '#000',
+  },
+  discription: {
+    borderWidth: 2,
+    borderRadius: 5,
+    paddingHorizontal: rw(5),
+    borderColor: '#2d224a',
+    backgroundColor: '#dbdbdba4',
+    marginTop: rh(1),
+    height: rh(30),
+  },
+  discriptionInput: {
+    color: '#000',
+    fontSize: rf(2.2),
+    fontWeight: '600',
   },
 });

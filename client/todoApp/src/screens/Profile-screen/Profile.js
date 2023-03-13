@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   RefreshControl,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {gStyles} from '../../constents/gStyle.js';
 import {rf, rh, rw} from '../../constents/responsiveDimensions.js';
 import useApi from '../../api/useApi.js';
@@ -15,14 +15,17 @@ import userInformation from '../../constents/userInformation.js';
 import LoadingItemsCom from '../../components/LoadingItemsCom.js';
 import navString from '../../constents/navString.js';
 import fontName from '../../constents/fontName.js';
+import {useSelector} from 'react-redux';
+import {Container} from 'native-base';
+import Convator from '../../utilits/convater.js';
 
 export default function Profile({navigation}) {
   const {data, getData, status, loading, deleteData} = useApi();
-  const url = `${userInformation.url}users/${userInformation.userId}`;
   const [userTodos, setuserTodos] = useState([]);
-  const [refreshing, setRefreshing] = React.useState(false);
-  const [user, setUser] = useState({image: null, name: null});
-
+  const [refreshing, setRefreshing] = useState(false);
+  const [user, setUser] = useState({image: '', name: ''});
+  const userId = useSelector(state => state.auth.userId);
+  const url = `${userInformation.url}users/${userId}`;
   // fetch todos
   useEffect(() => {
     getData(url);
@@ -31,6 +34,8 @@ export default function Profile({navigation}) {
   // set todos in state
   useEffect(() => {
     if (status === 200) {
+      console.log(data);
+
       setUser({image: data.user.image, name: data.user.name});
       setuserTodos([...data.user.todos]);
     }
@@ -43,7 +48,7 @@ export default function Profile({navigation}) {
   };
 
   // handle refresh
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     getData(url);
     setTimeout(() => {
@@ -60,7 +65,10 @@ export default function Profile({navigation}) {
         }>
         <View style={styles.profile}>
           <View style={[gStyles.imageView, styles.imageView]}>
-            <Image style={gStyles.imageStyle} source={{uri: `${user.image}`}} />
+            <Image
+              style={gStyles.imageStyle}
+              source={{uri: `${Convator.urlConvator(user.image)}`}}
+            />
           </View>
           <Text style={styles.username}>{user.name}</Text>
         </View>

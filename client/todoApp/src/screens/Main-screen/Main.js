@@ -1,4 +1,10 @@
-import {FlatList, RefreshControl, StatusBar, StyleSheet} from 'react-native';
+import {
+  FlatList,
+  RefreshControl,
+  StatusBar,
+  StyleSheet,
+  Text,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CardCom from '../../components/CardCom.jsx';
 import useApi from '../../api/useApi.js';
@@ -7,12 +13,15 @@ import LoadingItemsCom from '../../components/LoadingItemsCom.js';
 import userInformation from '../../constents/userInformation.js';
 import {View} from 'native-base';
 import {rw} from '../../constents/responsiveDimensions.js';
+import {useDispatch} from 'react-redux';
+import {loginOut} from '../../redux/futures/authSlice.js';
 
 export default function Main({navigation}) {
   const {data, getData, loading, status} = useApi();
   const [todosData, setTodosData] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
   const url = `${userInformation.url}todos/`;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getData(url);
@@ -54,6 +63,7 @@ export default function Main({navigation}) {
           keyExtractor={item => item._id}
         />
       )}
+      <Text onPress={() => dispatch(loginOut())}>Logout</Text>
     </View>
   );
 }

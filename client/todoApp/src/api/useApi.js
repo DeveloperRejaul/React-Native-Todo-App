@@ -1,15 +1,21 @@
 import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 
 export default () => {
   const [data, setdata] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [status, setStatus] = useState(null);
+  const token = useSelector(state => state.auth.token);
 
   // get data
   const getData = async (url = '') => {
     setLoading(true);
-    await fetch(url)
+    await fetch(url, {
+      headers: {
+        Authorization: 'brear ' + token,
+      },
+    })
       .then(res => {
         setStatus(res.status);
         return res.json();

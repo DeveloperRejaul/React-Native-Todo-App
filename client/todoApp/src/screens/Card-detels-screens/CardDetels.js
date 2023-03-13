@@ -2,9 +2,12 @@ import {Image, StyleSheet, Text, View, ScrollView} from 'react-native';
 import React from 'react';
 import HeaderCom from '../../components/HeaderCom.js';
 import {rf, rh, rw} from '../../constents/responsiveDimensions.js';
+import userInformation from '../../constents/userInformation.js';
+import Convator from '../../utilits/convater.js';
 export default function CardDetels(props) {
   const {navigation, route} = props;
   const {data} = route.params;
+
   return (
     <>
       <HeaderCom text={'Detels Todo'} onPress={() => navigation.goBack()} />
@@ -15,7 +18,7 @@ export default function CardDetels(props) {
               <View style={styles.imageView}>
                 <Image
                   style={styles.imageStyle}
-                  source={{uri: `${data.user.image}`}}
+                  source={{uri: `${Convator.urlConvator(data.user.image)}`}}
                 />
               </View>
               <Text style={styles.username}>{data.user.name}</Text>

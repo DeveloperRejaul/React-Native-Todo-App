@@ -4,6 +4,7 @@ import {rf, rh, rw} from '../constents/responsiveDimensions.js';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import navString from '../constents/navString.js';
 import {useNavigation} from '@react-navigation/native';
+import Convator from '../utilits/convater.js';
 
 export default function CardCom({ele}) {
   const nav = useNavigation();
@@ -14,7 +15,10 @@ export default function CardCom({ele}) {
     <View style={styles.container}>
       <View style={styles.profile}>
         <Pressable style={styles.ProfileImage}>
-          <Image style={styles.image} source={{uri: `${image}`}} />
+          <Image
+            style={styles.image}
+            source={{uri: `${Convator.urlConvator(image)}`}}
+          />
         </Pressable>
         <Text style={styles.userName}>{name}</Text>
       </View>
@@ -62,19 +66,10 @@ const styles = StyleSheet.create({
   profile: {flexDirection: 'row', alignItems: 'center', padding: rw(1)},
   container: {
     paddingHorizontal: rw(2),
-    backgroundColor: '#fff',
+    backgroundColor: '#f0eaead0',
     padding: rw(2),
     borderRadius: rf(2),
     marginTop: rh(1),
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
   },
   userName: {
     color: '#000',
