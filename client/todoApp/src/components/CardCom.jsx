@@ -45,7 +45,7 @@ export default function CardCom({ele}) {
 
 const styles = StyleSheet.create({
   cardBody: {
-    backgroundColor: '#ECF9FF',
+    backgroundColor: '#ffffff81',
     padding: rw(2),
     borderRadius: rf(1),
     flexDirection: 'row',
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   profile: {flexDirection: 'row', alignItems: 'center', padding: rw(1)},
   container: {
     paddingHorizontal: rw(2),
-    backgroundColor: '#f0eaead0',
+    backgroundColor: '#ecf9ff',
     padding: rw(2),
     borderRadius: rf(2),
     marginTop: rh(1),

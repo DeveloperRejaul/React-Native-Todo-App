@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     paddingHorizontal: rw(5),
     borderColor: '#2d224a',
-    backgroundColor: '#dbdbdba4',
+    backgroundColor: '#ecf9ff',
     color: '#000',
   },
   discription: {
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: rw(5),
     borderColor: '#2d224a',
-    backgroundColor: '#dbdbdba4',
+    backgroundColor: '#ecf9ff',
     marginTop: rh(1),
     height: rh(30),
   },

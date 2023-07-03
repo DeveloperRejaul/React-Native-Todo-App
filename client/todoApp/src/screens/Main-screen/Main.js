@@ -55,6 +55,7 @@ export default function Main({navigation}) {
         <LoadingItemsCom />
       ) : (
         <FlatList
+          showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
